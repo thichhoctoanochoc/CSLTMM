@@ -1,0 +1,100 @@
+package BTC2Matma;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ *
+ * @author BaoDat
+ */
+public class Baitap1 {
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        System.out.print("\n Nhập vào chuỗi mật mã (viết hoa): ");
+        Scanner input = new Scanner(System.in);        
+        String s = input.nextLine();
+        for(int i=0; i<enCoding(s).size(); i++){
+            System.out.print(" "+enCoding(s).get(i));
+        }
+        System.out.print("\n");
+        for(int j=0; j<26; j++){
+            System.out.print("\n Mã "+j+":\t");        
+            for(int i=0; i<enCrypt(enCoding(s),j).size(); i++){
+                int so = (int)enCrypt(enCoding(s),j).get(i)+65;
+                System.out.print(" "+(char)so);
+            }
+            //System.out.print("\nXác Suất xuất hiện: ");
+            System.out.print("\n");
+            for(int u=0; u<26; u++){
+                float xs = soLuongKyTu(enCrypt(enCoding(s),j),u);
+                System.out.print("\t"+(char)(u+65)+":"+xs);
+            }            
+            /*float e = xacSuatMoiKyTu(enCrypt(enCoding(s),j),4)*100;
+            System.out.format("\n\te: %.2f%n ", e);
+            float t = xacSuatMoiKyTu(enCrypt(enCoding(s),j),19)*100;
+            System.out.format("\tt: %.2f%n ", t);
+            float a = xacSuatMoiKyTu(enCrypt(enCoding(s),j),0)*100;
+            System.out.format("\ta: %.2f%n ", a);
+            float h = xacSuatMoiKyTu(enCrypt(enCoding(s),j),7)*100;
+            System.out.format("\th: %.2f%n ", h);
+            float o = xacSuatMoiKyTu(enCrypt(enCoding(s),j),14)*100;
+            System.out.format("\to: %.2f%n ", o);
+            float n = xacSuatMoiKyTu(enCrypt(enCoding(s),j),13)*100;
+            System.out.format("\tn: %.2f%n ", n);*/
+        }
+    }
+
+    public static ArrayList enCoding(String chuoi) throws UnsupportedEncodingException{
+        byte[] bytes = chuoi.getBytes("US-ASCII");
+        ArrayList chuoiso = new ArrayList<>();
+        for(int i=0; i<bytes.length; i++){
+            int a = (int)bytes[i] - 65;
+            chuoiso.add(a);           
+        }
+        return chuoiso;
+    }
+    
+    public static ArrayList enCrypt(ArrayList chuoiso, int key){
+        ArrayList chuoiso_encrypt = new ArrayList<>();
+        for(int i=0; i<chuoiso.size(); i++){
+            int a =(int) chuoiso.get(i) - key;
+            while(a>=26||a<0){               
+                if(a>=26) a-=26;
+                if(a<0) a+=26;               
+            }
+            chuoiso_encrypt.add(a);
+        }
+        return chuoiso_encrypt;
+    }
+    
+    public static float xacSuatMoiKyTu(ArrayList chuoi, int kytu){
+        float sokytu = 0;
+        for(int i=0; i<chuoi.size(); i++){
+            int d = ((int)chuoi.get(i)*1)/1;
+            if(d==kytu){
+                sokytu++;
+            }
+        }
+        float ds = sokytu/(float)(chuoi.size());
+        return ds;
+    }
+    
+    public static int soLuongKyTu(ArrayList chuoi, int kytu){
+        int sokytu = 0;
+        for(int i=0; i<chuoi.size(); i++){
+            int d = ((int)chuoi.get(i)*1)/1;
+            if(d==kytu){
+                sokytu++;
+            }
+        }
+        return sokytu;
+    }
+    
+    /*public static ArrayList deCode(ArrayList chuoiso){
+        ArrayList chuoikytu = new ArrayList<>();
+        for(int i=0; i<chuoiso.size(); i++){
+            chuoikytu.add((char)chuoiso.get(i));
+        }
+        return chuoikytu;
+    }*/
+}
